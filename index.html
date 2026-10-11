@@ -1,0 +1,270 @@
+<!doctype html>
+<html lang="nl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#123b55">
+<title>SOMFY Oximo RTS – programmeren en afstellen</title>
+<style>
+:root {
+  color-scheme: light;
+  --ink: #172b38;
+  --muted: #4d626e;
+  --brand: #123b55;
+  --brand2: #1e607e;
+  --paper: #f3f7f9;
+  --card: #ffffff;
+  --line: #d4e0e6;
+  --warn: #fff4d6;
+}
+* { box-sizing: border-box; }
+html { -webkit-text-size-adjust: 100%; }
+body {
+  margin: 0; background: var(--paper); color: var(--ink);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+  font-size: 20px; line-height: 1.45;
+}
+header {
+  background: var(--brand); color: white; padding: 20px 18px 22px;
+  padding-top: max(20px, env(safe-area-inset-top));
+}
+.header-inner, main { width: min(100%, 760px); margin: 0 auto; }
+header h1 { font-size: 1.25rem; line-height: 1.25; margin: 0; font-weight: 750; }
+header p { margin: 7px 0 0; font-size: 1rem; color: #e2edf2; }
+main { padding: 18px 14px calc(28px + env(safe-area-inset-bottom)); }
+h2 { font-size: 1.2rem; line-height: 1.3; margin: 0 0 14px; }
+h3 { font-size: 1rem; line-height: 1.35; margin: 22px 0 8px; }
+p { margin: 0 0 12px; }
+.home-grid { display: grid; grid-template-columns: 1fr; gap: 11px; }
+.nav-button {
+  display: flex; align-items: center; gap: 14px; width: 100%; min-height: 68px;
+  border: 1px solid var(--line); border-radius: 14px; padding: 14px 16px;
+  background: var(--card); color: var(--ink); text-align: left;
+  font: inherit; font-weight: 700; cursor: pointer; box-shadow: 0 2px 5px #17394a0c;
+}
+.nav-button:active, .action-button:active { transform: scale(.99); }
+.nav-number {
+  flex: 0 0 38px; height: 38px; border-radius: 10px; display: grid; place-items: center;
+  background: #e4f0f5; color: var(--brand); font-size: 1rem; font-weight: 800;
+}
+.card {
+  background: var(--card); border: 1px solid var(--line); border-radius: 16px;
+  padding: 18px 17px; box-shadow: 0 2px 7px #17394a0a;
+}
+.steps { margin: 0; padding-left: 1.4em; }
+.steps li { padding-left: 4px; margin: 0 0 13px; }
+.steps li:last-child { margin-bottom: 0; }
+.controls { display: inline-flex; align-items: center; gap: 8px; vertical-align: middle; flex-wrap: wrap; }
+.key {
+  width: 44px; height: 44px; min-width: 44px; display: inline-flex;
+  align-items: center; justify-content: center; position: relative;
+  vertical-align: middle; border: 2px solid #243d4a; background: #fff; color: #152d3a;
+  box-shadow: inset 0 -3px 0 #d9e1e5; flex-shrink: 0;
+}
+.key-arrow { border-radius: 10px; flex-direction: column; gap: 0; }
+.key-arrow svg { display: none; }
+.key-arrow::before {
+  content: ""; display: block; width: 26px; height: 34px; background: #172f3d;
+  flex: 0 0 auto;
+}
+.key-arrow[aria-label="Op"]::before {
+  clip-path: polygon(50% 0, 100% 38%, 69% 38%, 69% 100%, 31% 100%, 31% 38%, 0 38%);
+}
+.key-arrow[aria-label="Neer"]::before {
+  clip-path: polygon(31% 0, 69% 0, 69% 62%, 100% 62%, 50% 100%, 0 62%, 31% 62%);
+}
+.key-arrow .triangle { fill: #172f3d; }
+.key-arrow .shaft { stroke: #172f3d; stroke-width: 2.8; stroke-linecap: round; stroke-linejoin: round; fill: none; }
+.key-my { border-radius: 50%; font-size: 14px; font-weight: 850; letter-spacing: -.4px; }
+.key-prg { border-radius: 7px; font-size: 13px; font-weight: 850; letter-spacing: -.5px; }
+.key-inline { margin: 0 3px; }
+.note {
+  background: var(--warn); border-left: 5px solid #c18a13; padding: 13px 14px;
+  border-radius: 8px; margin: 16px 0 0;
+}
+.note strong { display: block; margin-bottom: 3px; }
+.toolbar { display: flex; gap: 10px; margin-bottom: 14px; }
+.action-button {
+  font: inherit; font-size: 1rem; font-weight: 750; border: 0; border-radius: 12px;
+  padding: 12px 15px; min-height: 48px; cursor: pointer;
+}
+.back { color: white; background: var(--brand2); }
+.home { color: var(--brand); background: #e0edf2; }
+.phone { display: inline-block; font-size: 1.25rem; font-weight: 800; color: var(--brand); margin: 8px 0; }
+.small-note { color: var(--muted); }
+[hidden] { display: none !important; }
+@media (min-width: 560px) {
+  .home-grid { grid-template-columns: 1fr 1fr; }
+  main { padding-top: 24px; }
+}
+@media (prefers-reduced-motion: reduce) { * { scroll-behavior: auto !important; transition: none !important; } }
+</style>
+</head>
+<body>
+<header>
+  <div class="header-inner">
+    <h1>SOMFY Oximo RTS en IO motoren</h1>
+    <p>Programmeren en afstellen · snelle handleiding</p>
+  </div>
+</header>
+<main>
+  <section id="home">
+    <h2>Kies wat je wilt doen</h2>
+    <div class="home-grid">
+      <button class="nav-button" data-page="nieuw">Nieuwe</button>
+      <button class="nav-button" data-page="eindpunten">Eindpunten</button>
+      <button class="nav-button" data-page="my">My</button>
+      <button class="nav-button" data-page="zenderbij">Zender bij</button>
+      <button class="nav-button" data-page="zenderweg">Zender weg</button>
+      <button class="nav-button" data-page="deelswissen">Deels wissen</button>
+      <button class="nav-button" data-page="volwissen">Vol wissen</button>
+      <button class="nav-button" data-page="helpdesk">Helpdesk</button>
+    </div>
+    <div class="card" style="margin-top:16px">
+      <h3 style="margin-top:0">Knoppen op de zender</h3>
+      <p><span class="key key-arrow" aria-label="Op"><svg viewBox="0 0 24 24" aria-hidden="true"><path class="shaft" d="M12 20V5M6.5 10.5 12 5l5.5 5.5"/></svg><svg viewBox="0 0 24 10" aria-hidden="true" style="height:8px"><path class="triangle" d="M12 0 22 10H2Z"/></svg></span> <span class="key key-arrow" aria-label="Neer"><svg viewBox="0 0 24 10" aria-hidden="true" style="height:8px"><path class="triangle" d="M2 0H22L12 10Z"/></svg><svg viewBox="0 0 24 24" aria-hidden="true"><path class="shaft" d="M12 4v15m-5.5-5.5L12 19l5.5-5.5"/></svg></span> <span class="key key-my" aria-label="My">MY</span> <span class="key key-prg" aria-label="Programmeren">PRG</span></p>
+      <p class="small-note">Houd de opgegeven tijden aan. De motor bevestigt stappen doorgaans met een korte beweging.</p>
+    </div>
+  </section>
+
+  <section id="nieuw" hidden>
+    <div class="toolbar"><button class="action-button back" data-home>← Terug</button><button class="action-button home" data-home>Startpagina</button></div>
+    <div class="card">
+      <h2>Nieuwe — programmeren en afstellen</h2>
+      <ol class="steps">
+        <li>Zet de motor onder spanning. Beweegt hij kort heen en weer, dan zijn de eindpunten al ingesteld.</li>
+        <li>Neem controle: druk <span class="controls"><span class="key key-arrow" aria-label="Op"><svg viewBox="0 0 24 24"><path class="shaft" d="M12 20V5M6.5 10.5 12 5l5.5 5.5"/></svg><svg viewBox="0 0 24 10" style="height:8px"><path class="triangle" d="M12 0 22 10H2Z"/></svg></span><span class="key key-arrow" aria-label="Neer"><svg viewBox="0 0 24 10" style="height:8px"><path class="triangle" d="M2 0H22L12 10Z"/></svg><svg viewBox="0 0 24 24"><path class="shaft" d="M12 4v15m-5.5-5.5L12 19l5.5-5.5"/></svg></span></span> samen ongeveer 1 seconde in. De motor beweegt kort.</li>
+        <li>Controleer de draairichting met <span class="key key-arrow key-inline" aria-label="Op"><svg viewBox="0 0 24 24"><path class="shaft" d="M12 20V5M6.5 10.5 12 5l5.5 5.5"/></svg><svg viewBox="0 0 24 10" style="height:8px"><path class="triangle" d="M12 0 22 10H2Z"/></svg></span> of <span class="key key-arrow key-inline" aria-label="Neer"><svg viewBox="0 0 24 10" style="height:8px"><path class="triangle" d="M2 0H22L12 10Z"/></svg><svg viewBox="0 0 24 24"><path class="shaft" d="M12 4v15m-5.5-5.5L12 19l5.5-5.5"/></svg></span>. Klopt ze niet? Houd <span class="key key-my key-inline" aria-label="My">MY</span> ongeveer 3 seconden in; controleer opnieuw.</li>
+        <li>Onderste eindpunt: zet het rolluik op de gewenste positie en druk <span class="key key-my key-inline" aria-label="My">MY</span> + <span class="key key-arrow key-inline" aria-label="Op"><svg viewBox="0 0 24 24"><path class="shaft" d="M12 20V5M6.5 10.5 12 5l5.5 5.5"/></svg><svg viewBox="0 0 24 10" style="height:8px"><path class="triangle" d="M12 0 22 10H2Z"/></svg></span> samen. De motor draait omhoog; stop tijdig.</li>
+        <li>Bovenste eindpunt: zet het rolluik op de gewenste positie en druk <span class="key key-my key-inline" aria-label="My">MY</span> + <span class="key key-arrow key-inline" aria-label="Neer"><svg viewBox="0 0 24 10" style="height:8px"><path class="triangle" d="M2 0H22L12 10Z"/></svg><svg viewBox="0 0 24 24"><path class="shaft" d="M12 4v15m-5.5-5.5L12 19l5.5-5.5"/></svg></span> samen. De motor draait omlaag; laat het rolluik ongeveer halfweg stoppen.</li>
+        <li>Bevestig de eindpunten: houd <span class="key key-my key-inline" aria-label="My">MY</span> ongeveer 2 seconden in tot de motor kort beweegt.</li>
+        <li>Beëindig en programmeer: druk korter dan 1 seconde op <span class="key key-prg key-inline" aria-label="Programmeren">PRG</span>. De motor beweegt kort en het geheugen sluit.</li>
+      </ol>
+      <div class="note"><strong>Let op</strong>Reageert de motor niet bij het inschakelen, dan kan hij nog in fabrieksstand staan of op een andere zender zijn ingelezen. Zie ‘Vol wissen’ in dat geval.</div>
+    </div>
+  </section>
+
+  <section id="eindpunten" hidden>
+    <div class="toolbar"><button class="action-button back" data-home>← Terug</button><button class="action-button home" data-home>Startpagina</button></div>
+    <div class="card">
+      <h2>Eindpunten — aanpassen</h2>
+      <h3>Onderste eindpunt</h3>
+      <ol class="steps">
+        <li>Druk op <span class="key key-arrow key-inline" aria-label="Neer"><svg viewBox="0 0 24 10" style="height:8px"><path class="triangle" d="M2 0H22L12 10Z"/></svg><svg viewBox="0 0 24 24"><path class="shaft" d="M12 4v15m-5.5-5.5L12 19l5.5-5.5"/></svg></span> en laat de motor naar het ingestelde eindpunt draaien.</li>
+        <li>Druk <span class="key key-arrow key-inline" aria-label="Op"><svg viewBox="0 0 24 24"><path class="shaft" d="M12 20V5M6.5 10.5 12 5l5.5 5.5"/></svg><svg viewBox="0 0 24 10" style="height:8px"><path class="triangle" d="M12 0 22 10H2Z"/></svg></span> + <span class="key key-arrow key-inline" aria-label="Neer"><svg viewBox="0 0 24 10" style="height:8px"><path class="triangle" d="M2 0H22L12 10Z"/></svg><svg viewBox="0 0 24 24"><path class="shaft" d="M12 4v15m-5.5-5.5L12 19l5.5-5.5"/></svg></span> samen tot de motor reageert.</li>
+        <li>Verstel tot de gewenste hoogte.</li>
+        <li>Houd <span class="key key-my key-inline" aria-label="My">MY</span> ongeveer 2 seconden in tot de motor opnieuw reageert.</li>
+      </ol>
+      <h3>Bovenste eindpunt</h3>
+      <ol class="steps">
+        <li>Druk op <span class="key key-arrow key-inline" aria-label="Op"><svg viewBox="0 0 24 24"><path class="shaft" d="M12 20V5M6.5 10.5 12 5l5.5 5.5"/></svg><svg viewBox="0 0 24 10" style="height:8px"><path class="triangle" d="M12 0 22 10H2Z"/></svg></span> en laat de motor naar het ingestelde eindpunt draaien.</li>
+        <li>Druk <span class="key key-arrow key-inline" aria-label="Op"><svg viewBox="0 0 24 24"><path class="shaft" d="M12 20V5M6.5 10.5 12 5l5.5 5.5"/></svg><svg viewBox="0 0 24 10" style="height:8px"><path class="triangle" d="M12 0 22 10H2Z"/></svg></span> + <span class="key key-arrow key-inline" aria-label="Neer"><svg viewBox="0 0 24 10" style="height:8px"><path class="triangle" d="M2 0H22L12 10Z"/></svg><svg viewBox="0 0 24 24"><path class="shaft" d="M12 4v15m-5.5-5.5L12 19l5.5-5.5"/></svg></span> samen tot de motor reageert.</li>
+        <li>Verstel tot de gewenste hoogte.</li>
+        <li>Houd <span class="key key-my key-inline" aria-label="My">MY</span> ongeveer 2 seconden in tot de motor opnieuw reageert.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="my" hidden>
+    <div class="toolbar"><button class="action-button back" data-home>← Terug</button><button class="action-button home" data-home>Startpagina</button></div>
+    <div class="card">
+      <h2>My — tussenpositie</h2>
+      <h3>Instellen of aanpassen</h3>
+      <ol class="steps">
+        <li>Breng de motor op de gewenste hoogte.</li>
+        <li>Houd <span class="key key-my key-inline" aria-label="My">MY</span> ongeveer 5 seconden in. Bij een motorreactie is de positie opgeslagen.</li>
+      </ol>
+      <h3>Verwijderen</h3>
+      <ol class="steps">
+        <li>Druk op <span class="key key-my key-inline" aria-label="My">MY</span> om naar de opgeslagen tussenpositie te gaan.</li>
+        <li>Houd <span class="key key-my key-inline" aria-label="My">MY</span> ongeveer 5 seconden in tot de motor reageert.</li>
+      </ol>
+      <h3>Gebruiken</h3>
+      <ol class="steps"><li>Druk op <span class="key key-my key-inline" aria-label="My">MY</span> om de motor naar de ingestelde tussenpositie te sturen.</li></ol>
+    </div>
+  </section>
+
+  <section id="zenderbij" hidden>
+    <div class="toolbar"><button class="action-button back" data-home>← Terug</button><button class="action-button home" data-home>Startpagina</button></div>
+    <div class="card">
+      <h2>Zender bij — een zender toevoegen</h2>
+      <ol class="steps">
+        <li>Houd <span class="key key-prg key-inline" aria-label="Programmeren">PRG</span> op de reeds ingelezen zender ongeveer 3 seconden in, tot de motor reageert.</li>
+        <li>Druk korter dan 1 seconde op <span class="key key-prg key-inline" aria-label="Programmeren">PRG</span> op de nieuwe zender. De motor reageert opnieuw.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="zenderweg" hidden>
+    <div class="toolbar"><button class="action-button back" data-home>← Terug</button><button class="action-button home" data-home>Startpagina</button></div>
+    <div class="card">
+      <h2>Zender weg — een zender verwijderen</h2>
+      <ol class="steps">
+        <li>Houd <span class="key key-prg key-inline" aria-label="Programmeren">PRG</span> op de zender die je wilt behouden ongeveer 3 seconden in, tot de motor reageert.</li>
+        <li>Druk korter dan 1 seconde op <span class="key key-prg key-inline" aria-label="Programmeren">PRG</span> op de zender die je wilt verwijderen. De motor reageert opnieuw.</li>
+      </ol>
+      <div class="note"><strong>Let op</strong>Open het geheugen met de zender die je wilt behouden, niet met de zender die je wilt verwijderen.</div>
+    </div>
+  </section>
+
+  <section id="deelswissen" hidden>
+    <div class="toolbar"><button class="action-button back" data-home>← Terug</button><button class="action-button home" data-home>Startpagina</button></div>
+    <div class="card">
+      <h2>Deels wissen — geheugen gedeeltelijk wissen</h2>
+      <p>Alle zenders en sensoren worden gewist. De eindpunten blijven behouden.</p>
+      <ol class="steps">
+        <li>Zorg dat alleen de motor die je wilt wissen onder spanning staat.</li>
+        <li>Onderbreek de spanning 2 seconden.</li>
+        <li>Zet de spanning 8 seconden terug aan.</li>
+        <li>Onderbreek de spanning opnieuw 2 seconden.</li>
+        <li>Zet de spanning weer aan. De motor reageert.</li>
+        <li>Druk korter dan 1 seconde op <span class="key key-prg key-inline" aria-label="Programmeren">PRG</span> van de zender die je wilt blijven gebruiken. De motor reageert.</li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="volwissen" hidden>
+    <div class="toolbar"><button class="action-button back" data-home>← Terug</button><button class="action-button home" data-home>Startpagina</button></div>
+    <div class="card">
+      <h2>Vol wissen — geheugen volledig wissen</h2>
+      <p>De motor keert terug naar fabrieksstand: eindposities, zenders en sensoren worden gewist.</p>
+      <ol class="steps">
+        <li>Zorg dat alleen de motor die je wilt wissen onder spanning staat.</li>
+        <li>Onderbreek de spanning 2 seconden.</li>
+        <li>Zet de spanning 8 seconden terug aan.</li>
+        <li>Onderbreek de spanning opnieuw 2 seconden.</li>
+        <li>Zet de spanning weer aan. De motor reageert.</li>
+        <li>Houd <span class="key key-prg key-inline" aria-label="Programmeren">PRG</span> op de zender ingedrukt. De motor reageert; <strong>BLIJF INGEDRUKT HOUDEN</strong>.</li>
+        <li>Na ongeveer 5 seconden reageert de motor opnieuw. De fabrieksstand is hersteld.</li>
+      </ol>
+      <div class="note"><strong>Let op</strong>Hierbij worden ook de eindposities gewist.</div>
+    </div>
+  </section>
+
+  <section id="helpdesk" hidden>
+    <div class="toolbar"><button class="action-button back" data-home>← Terug</button><button class="action-button home" data-home>Startpagina</button></div>
+    <div class="card">
+      <h2>Somfy helpdesk</h2>
+      <p>Voor technische vragen:</p>
+      <p><strong>Somfy Customer Support</strong></p>
+      <a class="phone" href="tel:+3227120777">02 712 07 77</a>
+    </div>
+  </section>
+</main>
+<script>
+const home = document.getElementById('home');
+const pages = [...document.querySelectorAll('main > section:not(#home)')];
+function showPage(id) {
+  home.hidden = id !== 'home';
+  pages.forEach(page => page.hidden = page.id !== id);
+  window.scrollTo({top: 0, behavior: 'auto'});
+}
+document.querySelectorAll('[data-page]').forEach(button => {
+  button.addEventListener('click', () => showPage(button.dataset.page));
+});
+document.querySelectorAll('[data-home]').forEach(button => {
+  button.addEventListener('click', () => showPage('home'));
+});
+</script>
+</body>
+</html>
